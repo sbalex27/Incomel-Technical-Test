@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Incomel_Technical_Test.Models
@@ -23,9 +26,14 @@ namespace Incomel_Technical_Test.Models
         public float Bonus { get; set; }
 
         [DisplayName("ID Usuario")]
-        public int UserId { get; set; }
+        [ValidateNever]
+        public String UserId { get; set; }
+        [DisplayName("Creado Por")]
+        [ValidateNever]
+        public User User { get; set; }
 
-        [DisplayName("Creado")]
+        [DisplayName("Creado el")]
+        [ValidateNever]
         public DateTime CreatedAt { get; set; }
 
         [DisplayName("IGSS (Q.)")]

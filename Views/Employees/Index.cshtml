@@ -28,7 +28,7 @@
                 @Html.DisplayNameFor(model => model.Bonus)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserId)
+                @Html.DisplayNameFor(model => model.User)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreatedAt)
@@ -55,7 +55,7 @@
                 @Html.DisplayFor(modelItem => item.Bonus)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserId)
+                @Html.DisplayFor(modelItem => item.User.Email)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedAt)

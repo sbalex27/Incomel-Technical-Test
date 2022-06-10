@@ -8,16 +8,20 @@ using Microsoft.EntityFrameworkCore;
 using Incomel_Technical_Test.Data;
 using Incomel_Technical_Test.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace Incomel_Technical_Test.Controllers
 {
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public EmployeesController(ApplicationDbContext context)
+        public EmployeesController(ApplicationDbContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Employees
@@ -25,7 +29,7 @@ namespace Incomel_Technical_Test.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Employee != null ? 
-                          View(await _context.Employee.ToListAsync()) :
+                          View(await _context.Employee.Include(e => e.User) .ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Employee'  is null.");
         }
 
@@ -38,7 +42,7 @@ namespace Incomel_Technical_Test.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employee
+            var employee = await _context.Employee.Include(e => e.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (employee == null)
             {
@@ -63,8 +67,10 @@ namespace Incomel_Technical_Test.Controllers
         [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Dpi,FullName,ChildCount,Salary,Bonus,UserId,CreatedAt")] Employee employee)
         {
-            if (ModelState.IsValid)
+            User currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            if (ModelState.IsValid && currentUser != null)
             {
+                employee.UserId = currentUser.Id;
                 _context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -95,7 +101,7 @@ namespace Incomel_Technical_Test.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Dpi,FullName,ChildCount,Salary,Bonus,UserId,CreatedAt")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Dpi,FullName,ChildCount,Salary,Bonus")] Employee employee)
         {
             if (id != employee.Id)
             {
@@ -107,6 +113,8 @@ namespace Incomel_Technical_Test.Controllers
                 try
                 {
                     _context.Update(employee);
+                    _context.Entry(employee).Property(e => e.CreatedAt).IsModified = false;
+                    _context.Entry(employee).Property(e => e.UserId).IsModified = false;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -134,7 +142,7 @@ namespace Incomel_Technical_Test.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employee
+            var employee = await _context.Employee.Include(e => e.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (employee == null)
             {
