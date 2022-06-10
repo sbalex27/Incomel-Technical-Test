@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Incomel_Technical_Test.Models
 {
@@ -28,18 +29,23 @@ namespace Incomel_Technical_Test.Models
         public DateTime CreatedAt { get; set; }
 
         [DisplayName("IGSS (Q.)")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public float Igss => Salary * .0483f;
 
         [DisplayName("IRTRA (Q.)")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public float Irtra => Salary * .01f;
 
         [DisplayName("Bono de Paternidad (Q.)")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public float PaternityBonus => 133 * ChildCount;
 
         [DisplayName("Salario Total (Q.)")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public float TotalSalary => Salary + PaternityBonus + Bonus;
 
         [DisplayName("Salario Líquido (Q.)")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public float LiquidSalary => TotalSalary - Igss - Irtra;
 
         public Employee()

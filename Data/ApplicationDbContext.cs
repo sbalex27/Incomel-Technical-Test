@@ -14,8 +14,10 @@ namespace Incomel_Technical_Test.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Employee>()
+                    .Property(b => b.CreatedAt)
+                    .HasDefaultValueSql("getdate()");
             base.OnModelCreating(builder);
-            builder.UsePropertyAccessMode(PropertyAccessMode.PreferFieldDuringConstruction);
         }
     }
 }
