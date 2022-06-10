@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Incomel_Technical_Test.Data;
 using Incomel_Technical_Test.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Incomel_Technical_Test.Controllers
 {
@@ -20,6 +21,7 @@ namespace Incomel_Technical_Test.Controllers
         }
 
         // GET: Employees
+        [Authorize]
         public async Task<IActionResult> Index()
         {
               return _context.Employee != null ? 
@@ -28,6 +30,7 @@ namespace Incomel_Technical_Test.Controllers
         }
 
         // GET: Employees/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Employee == null)
@@ -46,6 +49,7 @@ namespace Incomel_Technical_Test.Controllers
         }
 
         // GET: Employees/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -56,6 +60,7 @@ namespace Incomel_Technical_Test.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Dpi,FullName,ChildCount,Salary,Bonus,UserId,CreatedAt")] Employee employee)
         {
             if (ModelState.IsValid)
@@ -68,6 +73,7 @@ namespace Incomel_Technical_Test.Controllers
         }
 
         // GET: Employees/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Employee == null)
@@ -88,6 +94,7 @@ namespace Incomel_Technical_Test.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Dpi,FullName,ChildCount,Salary,Bonus,UserId,CreatedAt")] Employee employee)
         {
             if (id != employee.Id)
@@ -119,6 +126,7 @@ namespace Incomel_Technical_Test.Controllers
         }
 
         // GET: Employees/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Employee == null)
@@ -139,6 +147,7 @@ namespace Incomel_Technical_Test.Controllers
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Employee == null)
