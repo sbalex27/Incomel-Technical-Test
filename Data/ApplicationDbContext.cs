@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Incomel_Technical_Test.Models;
 
 namespace Incomel_Technical_Test.Data
 {
@@ -9,5 +10,6 @@ namespace Incomel_Technical_Test.Data
             : base(options)
         {
         }
+        public DbSet<Incomel_Technical_Test.Models.Employee>? Employee { get; set; }
     }
 }

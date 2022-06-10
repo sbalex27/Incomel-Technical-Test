@@ -2,6 +2,7 @@
 {
     public class Employee
     {
+        public int Id { get; set; }
         public String Dpi { get; set; }
         public String FullName { get; set; }
         public int ChildCount { get; set; }
